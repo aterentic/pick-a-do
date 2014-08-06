@@ -1,5 +1,6 @@
 (ns pickado.repl
-  (:require [pickado.table :as table]
+  (:require [pickado.generator :as generator]
+            [pickado.table :as table]
             [pickado.rules :as rules]
             [pickado.game :as game]))
 
@@ -19,3 +20,6 @@
 
 (rules/winner? players (first players))
 (rules/winner? players (second players))
+
+(generator/multiplayer [0 0.3 0.6 1] (rand))
+(generator/field 20 (rand))

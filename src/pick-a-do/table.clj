@@ -6,7 +6,7 @@
 
 (defn field [] (keyword (str (inc (rand-int 20)))))
 
-(defn center? [table] (< (rand) (:center-to-field-ratio table) ))
+(defn center? [table] (< (rand) (:center-to-field-ratio table)))
 
 (defn throw-dart [table]
   (if (center? table)
