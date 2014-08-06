@@ -23,3 +23,7 @@
 (generator/field 20 (rand))
 
 (game/one-throw pick-a-do)
+
+(first players)
+
+(game/play (first players) (game/one-throw pick-a-do))

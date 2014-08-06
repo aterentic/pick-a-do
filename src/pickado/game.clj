@@ -23,8 +23,14 @@
         value (val entry)]
     (assoc player field (+ value (if (contains? player field) (field player) 0)))))
 
+
 (defn one-throw [{:keys [fields field-area center-area center-to-field-ratio]}]
   (let [center? (< (rand) center-to-field-ratio)
         field (if center? :center (keyword (str (generator/field fields (rand)))))
         multiplayer (generator/multiplayer (if center? center-area field-area) (rand))]
   {:field field :multiplayer multiplayer}))
+
+(defn play [player {:keys [field multiplayer]}]
+  (assoc player field (+ (or (field player) 0) multiplayer)))
+
+;; loop round / map players / 3x / get {:score :player} / filter players without player / map score to players / assoc :player with map
