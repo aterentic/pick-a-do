@@ -5,6 +5,7 @@ pom.xml.asc
 /classes/
 /target/
 /checkouts/
+.nrepl-port
 .lein-deps-sum
 .lein-repl-history
 .lein-plugins/
