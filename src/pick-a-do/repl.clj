@@ -1,6 +1,5 @@
 (ns pickado.repl
   (:require [pickado.generator :as generator]
-            [pickado.table :as table]
             [pickado.rules :as rules]
             [pickado.game :as game]))
 
@@ -16,8 +15,6 @@
 
 (game/throw-dart (first players) {:13 1})
 
-
-(table/round pick-a-do)
 
 (rules/winner? players (first players))
 (rules/winner? players (second players))

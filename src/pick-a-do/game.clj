@@ -28,9 +28,3 @@
         field (if center? :center (keyword (str (generator/field fields (rand)))))
         multiplayer (generator/multiplayer (if center? center-area field-area) (rand))]
   {:field field :multiplayer multiplayer}))
-
-
-;; Pickado
-;; -------
-;; Players play game. In one player round player throws three darts.
-;; In one dart throw, dart hits table, adds score to player, and score other players.
