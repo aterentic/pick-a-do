@@ -30,7 +30,7 @@
         multiplayer (generator/multiplayer (if center? center-area field-area) (rand))]
     {:field field :multiplayer multiplayer}))
 
-(defn play [player {:keys [field multiplayer]}]
+(defn turn [player {:keys [field multiplayer]}]
   (assoc player field (+ (or (field player) 0) multiplayer)))
 
 (defn new-game [players]
@@ -41,8 +41,13 @@
    :players (vec (repeat players {}))
    :round 0})
 
+(defn split-players [players player]
+  "Splits players on current and others."
+  {:current player
+   :others (filter #(not= % player) players)})
+
 (defn player-round [game]
-  (vec (map #(nth (iterate (fn [player] (play player (one-throw game))) %) 3) (:players game))))
+  (vec (map #(nth (iterate (fn [player] (turn player (one-throw game))) %) 3) (:players game))))
 
 (defn round [game]
   (-> game
