@@ -41,6 +41,15 @@
    :players (vec (repeat players {}))
    :round 0})
 
+(defn has-current? [players]
+  (reduce #(or %1 (current? %2)) false players))
+
+(defn current? [player]
+  (= (:current player) true))
+
+(defn next-player [players]
+  (conj (vec (rest players)) (first players)))
+
 (defn split-players [players player]
   "Splits players on current and others."
   {:current player
@@ -56,5 +65,3 @@
 
 (defn match [game rounds]
   (nth (iterate round game) rounds))
-
-;; loop round / map players / 3x / get {:score :player} / filter players without player / map score to players / assoc :player with map
