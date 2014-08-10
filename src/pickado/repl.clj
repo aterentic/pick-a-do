@@ -25,10 +25,6 @@
 
 (game/one-throw pick-a-do)
 
-(first players)
-
-(game/play (first players) (game/one-throw pick-a-do))
-
 (game/match (game/new-game 4) 22)
 
 (game/player-round (game/new-game 4))

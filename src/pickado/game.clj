@@ -30,8 +30,17 @@
         multiplayer (generator/multiplayer (if center? center-area field-area) (rand))]
     {:field field :multiplayer multiplayer}))
 
-(defn turn [player {:keys [field multiplayer]}]
-  (assoc player field (+ (or (field player) 0) multiplayer)))
+(defn scored-so-far [player field]
+  (or (field player) 0))
+
+(defn- turn-amount [player field multiplier]
+  (+ (scored-so-far player field) multiplier))
+
+(defn turn [player {:keys [field multiplier]}]
+  (assoc player field (turn-amount player field multiplier)))
+
+(defn score-amount [player {:keys [field multiplier]}]
+  {field (if (> (turn-amount player field multiplier) 3) (+ (- (field player) 3) multiplier) 0)})
 
 (defn new-game [players]
   {:field-area [0 0.80 0.90 1]
@@ -41,19 +50,8 @@
    :players (vec (repeat players {}))
    :round 0})
 
-(defn has-current? [players]
-  (reduce #(or %1 (current? %2)) false players))
-
-(defn current? [player]
-  (= (:current player) true))
-
 (defn next-player [players]
   (conj (vec (rest players)) (first players)))
-
-(defn split-players [players player]
-  "Splits players on current and others."
-  {:current player
-   :others (filter #(not= % player) players)})
 
 (defn player-round [game]
   (vec (map #(nth (iterate (fn [player] (turn player (one-throw game))) %) 3) (:players game))))
