@@ -1,4 +1,4 @@
-(ns pickado.test.game
+(ns pickado.game-tests
   (:use midje.sweet pickado.game))
 
 (fact "next-player cycles players so that next player is first."

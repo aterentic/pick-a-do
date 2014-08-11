@@ -1,5 +1,5 @@
 (ns pickado.game
-  (:require [pickado.generator :as generator]))
+  (:use [pickado.generator :as generator]))
 
 (defn- calculate-score [player field weight]
   (+ (or (field player) 0) weight -3))
