@@ -13,10 +13,6 @@
                 :players players
                 :round 0})
 
-
-(game/throw-dart (first players) {:13 1})
-
-
 (rules/winner? players (first players))
 (rules/winner? players (second players))
 
