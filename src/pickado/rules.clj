@@ -1,13 +1,14 @@
 (ns pickado.rules)
 
 (defn closed? [player field]
-  (>= (field player) 3))
+  (>= (or (field player) 0) 3))
 
 (defn closed-all? [player]
   (reduce
    (fn [result hits]
      (and result (>= hits 3)))
-   (map player [:15 :16 :17 :18 :19 :20 :center])))
+   (map #(if (nil? %) 0 %)
+        (map player [:15 :16 :17 :18 :19 :20 :center]))))
 
 (defn best? [players player]
   (<= (:score player) (reduce min (map :score players))))

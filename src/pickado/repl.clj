@@ -13,14 +13,5 @@
                 :players players
                 :round 0})
 
-(rules/winner? players (first players))
-(rules/winner? players (second players))
-
-(generator/multiplayer [0 0.3 0.6 1] (rand))
-(generator/field 20 (rand))
-
-(game/one-throw pick-a-do)
-
-(game/match (game/new-game 4) 22)
-
-(game/player-round (game/new-game 4))
+(count (filter true? (repeatedly 100 (fn [] (let [game (game/match (game/new-game 4) 250)]
+  (reduce #(or %1 %2) (map #(rules/winner? (:players game) %) (:players game))))))))

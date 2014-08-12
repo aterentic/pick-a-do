@@ -6,8 +6,8 @@
 (defn one-throw [{:keys [fields field-area center-area center-to-field-ratio]}]
   (let [center? (< (rand) center-to-field-ratio)
         field (if center? :center (keyword (str (generator/field fields (rand)))))
-        multiplayer (generator/multiplayer (if center? center-area field-area) (rand))]
-    {:field field :multiplayer multiplayer}))
+        multiplier (generator/multiplier (if center? center-area field-area) (rand))]
+    {:field field :multiplier multiplier}))
 
 (defn player-turn [player hit]
   (let [{:keys [field multiplier]} hit]
@@ -19,35 +19,33 @@
       (* 25 multiplier)
       (* (read-string (name field)) multiplier))))
 
-(defn score-player [player score-amount]
+(defn score-player [score-amount player]
   (let [{:keys [field multiplier]} score-amount]
     (if (rules/closed? player field)
       player
       (assoc player :score (score-value score-amount)))))
 
-  (defn turn [players hit]
-    (cons
-     (player-turn (first players))
-     (rest players)))
+(defn turn [players hit]
+  (cons
+   (player-turn (first players) hit)
+   (map #(score-player (score/other-score (first players) hit) %) (rest players))))
 
-  (defn new-game [players]
-    {:field-area [0 0.80 0.90 1]
-     :center-area [0 0.75 1]
-     :center-to-field-ratio 1/61
-     :fields 20
-     :players (vec (repeat players {}))
-     :round 0})
+(defn new-game [players]
+  {:field-area [0 0.80 0.90 1]
+   :center-area [0 0.75 1]
+   :center-to-field-ratio 1/61
+   :fields 20
+   :players (vec (repeat players {}))
+   :round 0})
 
-  (defn next-player [players]
-    (conj (vec (rest players)) (first players)))
+(defn next-player [players]
+  (conj (vec (rest players)) (first players)))
 
-  (defn player-round [game]
-    (vec (map #(nth (iterate (fn [player] (turn player (one-throw game))) %) 3) (:players game))))
+(defn game-turn [game]
+  (assoc game :players (vec (turn (:players game) (one-throw game)))))
 
-  (defn round [game]
-    (-> game
-        (assoc-in [:players] (player-round game))
-        (update-in [:round] inc)))
+(defn round [game]
+  (assoc game :players (next-player (:players (nth (iterate game-turn game) 3)))))
 
-  (defn match [game rounds]
-    (nth (iterate round game) rounds))
+(defn match [game rounds]
+  (nth (iterate round game) rounds))

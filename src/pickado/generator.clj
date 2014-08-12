@@ -5,6 +5,6 @@
   "Returs field mapped to random number [0,1)"
   (inc (math/round (math/floor (* fields random)))))
 
-(defn multiplayer [ranges random]
-  "Calculates multiplayer from given ranges [0...1] and random number [0,1)."
+(defn multiplier [ranges random]
+  "Calculates multiplier from given ranges [0...1] and random number [0,1)."
   (count (filter #(<= % random) ranges)))
