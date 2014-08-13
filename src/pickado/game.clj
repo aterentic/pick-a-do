@@ -3,7 +3,7 @@
         [pickado.score :as score]
         [pickado.rules :as rules]))
 
-(defn one-throw [{:keys [fields field-area center-area center-to-field-ratio]}]
+(defn throw-dart [{:keys [fields field-area center-area center-to-field-ratio]}]
   (let [center? (< (rand) center-to-field-ratio)
         field (if center? :center (keyword (str (generator/field fields (rand)))))
         multiplier (generator/multiplier (if center? center-area field-area) (rand))]
@@ -26,9 +26,9 @@
       (assoc player :score (score-value score-amount)))))
 
 (defn turn [players hit]
-  (cons
-   (player-turn (first players) hit)
-   (map #(score-player (score/other-score (first players) hit) %) (rest players))))
+  (vec (cons
+        (player-turn (first players) hit)
+        (map #(score-player (score/other-score (first players) hit) %) (rest players)))))
 
 (defn new-player [number]
   (reduce #(assoc %1 %2 0)
@@ -46,11 +46,15 @@
 (defn next-player [players]
   (conj (vec (rest players)) (first players)))
 
-(defn game-turn [game]
-  (assoc game :players (vec (turn (:players game) (one-throw game)))))
+(defn move [game]
+  (let [hit (throw-dart game)]
+    (update-in game [:players] #(turn % hit))))
+
+(defn three-moves [game]
+  (nth (iterate move game) 3))
 
 (defn round [game]
-  (assoc game :players (next-player (:players (nth (iterate game-turn game) 3)))))
+  (update-in (three-moves game) [:players] next-player))
 
 (defn match [game rounds]
   (nth (iterate round game) rounds))
