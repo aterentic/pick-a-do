@@ -30,12 +30,17 @@
    (player-turn (first players) hit)
    (map #(score-player (score/other-score (first players) hit) %) (rest players))))
 
+(defn new-player [number]
+  (reduce #(assoc %1 %2 0)
+          {:center 0 :score 0 :number number}
+          (map (comp keyword str) (range 1 21))))
+
 (defn new-game [players]
   {:field-area [0 0.80 0.90 1]
    :center-area [0 0.75 1]
    :center-to-field-ratio 1/61
    :fields 20
-   :players (vec (repeat players {}))
+   :players (vec (map new-player (range 1 players)))
    :round 0})
 
 (defn next-player [players]
