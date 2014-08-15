@@ -5,9 +5,8 @@
 
 (defn closed-all? [player]
   (reduce
-   (fn [result hits]
-     (and result (>= hits 3)))
-   (map player [:15 :16 :17 :18 :19 :20 :center])))
+   #(and %1 (closed? player %2))
+   [:15 :16 :17 :18 :19 :20 :center]))
 
 (defn best? [players player]
   (<= (:score player) (reduce min (map :score players))))
