@@ -1,12 +1,11 @@
 (ns pickado.rules)
 
 (defn closed? [player field]
-  (>= (field player) 3))
+  (>= (player field) 3))
 
 (defn closed-all? [player]
-  (reduce
-   #(and %1 (closed? player %2))
-   [:15 :16 :17 :18 :19 :20 :center]))
+  (every? (partial closed? player)
+          [:15 :16 :17 :18 :19 :20 :center]))
 
 (defn best? [players player]
   (<= (:score player) (reduce min (map :score players))))
