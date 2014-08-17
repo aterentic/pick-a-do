@@ -8,10 +8,13 @@
           [:15 :16 :17 :18 :19 :20 :center]))
 
 (defn best? [players player]
-  (<= (:score player) (reduce min (map :score players))))
+  (<= (:score player) (apply min (map :score (filter closed-all? players)))))
+
+(defn winner-exists? [players]
+  (some closed-all? players))
 
 (defn winner? [players player]
-  (let [finished (filter closed-all? players)]
-    (if (empty? finished)
-      false
-      (and (best? finished player) (closed-all? player)))))
+  (and
+   (winner-exists? players)
+   (closed-all? player)
+   (best? players player)))
