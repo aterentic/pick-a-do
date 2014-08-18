@@ -14,4 +14,4 @@
                 :round 0})
 
 (count (filter true? (repeatedly 100 (fn [] (let [game (game/match (game/new-game 4) 250)]
-  (reduce #(or %1 %2) (map #(rules/winner? (:players game) %) (:players game))))))))
+  (some true? (map #(rules/winner? (:players game) %) (:players game))))))))

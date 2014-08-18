@@ -10,11 +10,7 @@
 (defn best? [players player]
   (<= (:score player) (apply min (map :score (filter closed-all? players)))))
 
-(defn winner-exists? [players]
-  (some closed-all? players))
-
 (defn winner? [players player]
   (and
-   (winner-exists? players)
    (closed-all? player)
    (best? players player)))
